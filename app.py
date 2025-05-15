@@ -84,7 +84,7 @@ async def settings_create(settings: Settings):
     #check if settings is already created and needs to be updated
     #or if a new setting will be created
 
-    existing_setting = await settingsdb["settings"].find().to_list(1)
+    existing_setting = await settingsdb.find().to_list(1)
 
     if len (existing_setting) == 1:
         settingsdb["settings"].update_one({"_id": existing_setting[0]["_id"]}, {"$Set": settings.model_dump(exclude=["light_duration"])})
@@ -93,8 +93,8 @@ async def settings_create(settings: Settings):
         return JSONResponse(status_code=200, content=Settings_Updated(**new_setting))
     else:
         settings_para = settings.model_dump(exclude=["light_duration"])
-        inserted_settings = await settingsdb["settings"].insert_one(settings_para)
-        new_setting = await settingsdb["settings"].find_one({"_id": inserted_settings.inserted_id})
+        inserted_settings = await settingsdb.insert_one(settings_para)
+        new_setting = await settingsdb.find_one({"_id": inserted_settings.inserted_id})
 
         return JSONResponse(status_code=201, content=Settings_Updated(**new_setting).model_dump())
     
