@@ -38,12 +38,20 @@ sensordb = connection.Sensor_Data
 
 PyObjectId = Annotated[str, BeforeValidator(str)]
 
+"""
 class Settings(BaseModel):
-    id: Optional[PyObjectId] = Field(alias = "_id", default = None)
+    id: PyObjectId | None = Field(default=None, alias="_id")
     user_temp: float | None
     user_light: str | None
     light_duration: str | None
     light_time_off: str | None
+"""
+class Settings(BaseModel):
+    id: Optional[PyObjectId]= Field(alias="_id", default=None)
+    user_temp: Optional[float]=None
+    user_light: Optional[str]= None
+    light_duration: Optional[str]= None
+    light_time_off: Optional[str]= None
 
 class Settings_Updated(BaseModel):
     id: PyObjectId | None = Field(default=None, alias="_id")
