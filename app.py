@@ -102,7 +102,7 @@ async def settings_create(settings: Settings):
 
         return JSONResponse(status_code=201, content=Settings_Updated(**new_setting).model_dump())
     
-@app.post("/graph", status_code=200)
+@app.get("/graph", status_code=200)
 async def temp_data(size: int = None):
     data = await settingsdb["Final_Project"].find().to_list(size)
 
