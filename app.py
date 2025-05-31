@@ -9,7 +9,7 @@ from pydantic import BaseModel, BeforeValidator, Field, TypeAdapter
 from datetime import datetime, timedelta
 from uuid import uuid4, UUID
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Annotated, List
+from typing import Annotated, List, Optional
 import motor.motor_asyncio
 from dotenv import load_dotenv
 
@@ -39,7 +39,7 @@ sensordb = connection.Sensor_Data
 PyObjectId = Annotated[str, BeforeValidator(str)]
 
 class Settings(BaseModel):
-    id: PyObjectId | None = Field(default=None, alias="_id")
+    id: Optional[PyObjectId] = Field(alias = "_id", default = None)
     user_temp: float | None
     user_light: str | None
     light_duration: str | None
