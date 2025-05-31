@@ -33,8 +33,10 @@ app.add_middleware(
 #MONGO_URL = os.environ.get("MONGO_URL")
 connection = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URL"))
 
-settingsdb = connection.Final_Project
-sensordb = connection.Sensor_Data
+db = connection.Project
+
+settingsdb = db.Final_Project
+sensordb = db.Sensor_Data
 
 PyObjectId = Annotated[str, BeforeValidator(str)]
 
@@ -92,11 +94,12 @@ async def settings_create(settings: Settings):
         user_light = datetime.strptime(settings.user_light, "%H:%M:%S")
 
     duration = parse_time(settings.light_duration)
-    settings.light_time_off = (user_light + duration).strptime("%H:%M:%S")
+    settings.light_time_off = (user_light + duration).strftime("%H:%M:%S")
 
     #check if settings is already created and needs to be updated
     #or if a new setting will be created
 
+    #existing_setting = await settingsdb.find().to_list(1)
     existing_setting = await settingsdb.find().to_list(1)
 
     if len (existing_setting) == 1:
