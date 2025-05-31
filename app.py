@@ -11,6 +11,10 @@ from uuid import uuid4, UUID
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Annotated, List
 import motor.motor_asyncio
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 #
 
