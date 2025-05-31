@@ -30,6 +30,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+MONGO_URL = os.environ.get("MONGO_URL")
 connection = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_URL"))
 
 settingsdb = connection.Final_Project
