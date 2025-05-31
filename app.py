@@ -62,9 +62,10 @@ class Settings_Updated(BaseModel):
     light_time_off: Optional[str]= None
 
 class SensorData(BaseModel):
-    temperature: float | None
-    presence: bool | None
-    datetime: datetime | None
+    id: Optional[PyObjectId]= Field(default=None, alias="_id")
+    temperature: Optional[float]= None
+    presence: Optional[bool]= None
+    datetime: Optional[str]= None
 
 regex = re.compile(r'((?P<hours>\d+?)h)?((?P<minutes>\d+?)m)?((?P<seconds>\d+?)s)?')
 
