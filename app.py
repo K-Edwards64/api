@@ -56,10 +56,10 @@ class Settings(BaseModel):
     light_time_off: Optional[str]= None
 
 class Settings_Updated(BaseModel):
-    id: PyObjectId | None = Field(default=None, alias="_id")
-    user_temp: float | None
-    user_light: str | None
-    light_time_off: str | None
+    id: Optional[PyObjectId]= Field(default=None, alias="_id")
+    user_temp: Optional[float]= None
+    user_light: Optional[str]= None
+    light_time_off: Optional[str]= None
 
 class SensorData(BaseModel):
     temperature: float | None
@@ -103,16 +103,17 @@ async def settings_create(settings: Settings):
     existing_setting = await settingsdb.find().to_list(1)
 
     if len (existing_setting) == 1:
-        settingsdb["settings"].update_one({"_id": existing_setting[0]["_id"]}, {"$Set": settings.model_dump(exclude=["light_duration"])})
+        settingsdb.update_one({"_id": existing_setting[0]["_id"]}, {"$set": settings.model_dump(exclude=["light_duration"])})
 
-        new_setting = await settingsdb[settings].find_one({"_id": existing_setting[0]["_id"]})
-        return JSONResponse(status_code=200, content=Settings_Updated(**new_setting))
+        new_setting = await settingsdb.find_one({"_id": existing_setting[0]["_id"]})
+        return JSONResponse(status_code=200, content=Settings_Updated(**new_setting).model_dump())
     else:
         settings_para = settings.model_dump(exclude=["light_duration"])
         inserted_settings = await settingsdb.insert_one(settings_para)
         new_setting = await settingsdb.find_one({"_id": inserted_settings.inserted_id})
 
         return JSONResponse(status_code=201, content=Settings_Updated(**new_setting).model_dump())
+        #return JSONResponse(status_code=201, content=Settings_Updated(**new_setting).model_dump())
     
 @app.get("/graph", status_code=200)
 async def temp_data(size: int = None):
