@@ -130,8 +130,8 @@ async def make_SensorData(data: SensorData):
     current_time = datetime.now().strftime("%H:%M:%S")
     data_info = data.model_dump()
     data_info["datetime"] = current_time
-    new_entry = await sensordb["Sensor_Data"].insert_one(data_info)
-    created_entry = await sensordb["Sensor_Data"].find_one({"_id": new_entry.inserted_id})
+    new_entry = await sensordb.insert_one(data_info)
+    created_entry = await sensordb.find_one({"_id": new_entry.inserted_id})
 ###created another database for sensor data
     return SensorData(**created_entry)
 
