@@ -83,13 +83,17 @@ def get_sunset():
     URL = "https://api.sunrisesunset.io/json?lat=17.97787&lng=-76.77339&timezone=UTC&date=1990-05-22&time_format=24"
     response = requests.get(url=URL).json()
 
-    return response
+    sunset_time = response["results"]["sunset"]
+    convert_sun = datetime.strptime(sunset_time, '%H:%M:%S')
+
+    return sunset_time
 
 @app.put("/settings", status_code=201)
 async def settings_create(settings: Settings):
     #determine how time should be set for user light
     if settings.user_light == "sunset":
         user_light = datetime.strptime(get_sunset(), "%H:%M:%S")
+        settings.user_light = (user_light).strftime("%H:%M:%S")
     else:
         user_light = datetime.strptime(settings.user_light, "%H:%M:%S")
 
