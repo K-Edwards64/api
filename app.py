@@ -122,7 +122,7 @@ async def settings_create(settings: Settings):
     
 @app.get("/graph", status_code=200)
 async def temp_data(size: int = None):
-    data = await settingsdb["Final_Project"].find().to_list(size)
+    data = await sensordb.find().to_list(size)
 
     return TypeAdapter(List[SensorData]).validate_python(data)
 
